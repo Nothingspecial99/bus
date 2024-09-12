@@ -1,0 +1,236 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>History</title>
+    <style>
+        /* Basic CSS Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: url('{% static "main/images/home_bg.jpg"%}') no-repeat center center fixed;
+            background-size: cover;
+            padding-top: 60px;
+        }
+
+        h1 {
+            text-align: left;
+            margin-bottom: 20px;
+            color: white;
+            padding-left: 20px;
+        }
+
+        /* Navbar Styles */
+        nav {
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.3);
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            padding: 1em 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            text-align: right;
+            margin-right: 20px;
+        }
+        
+        nav ul li {
+            display: inline-block;
+            margin: 0 15px;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            padding: 0.5em 1em;
+            background-color: #007BFF;
+            border-radius: 5px;
+        }
+        
+        nav ul li a:hover {
+            background-color: #0056b3;
+        }
+
+        /* Table Styles */
+        .table-container {
+            margin: 0 auto;
+            padding: 0.1em;
+            width: 95%;
+
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #007BFF;
+            color: white;
+            font-size:0.7em;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        td input {
+            border: none;
+            background-color: inherit;
+            width: 100%;
+            margin: 0;
+        }
+
+        .update-btn {
+            background-color: #28a745;
+        }
+
+        .update-btn:hover {
+            background-color: #218838;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 24px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav>
+        <ul>
+            <li><a href="{% url 'main:index' %}">Home</a></li>
+        </ul>
+    </nav>
+
+    <h1>History</h1>
+
+    <div class="table-container">
+        <table>
+            {% if  records %}
+            <thead>
+                <tr>
+                    <th>Income(₹)</th>
+                    <th>Expense(₹)</th>
+                    <th>Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in records %}
+                <tr class='record-{{record.id}}'>
+                    <td><input type="number" value="{{ record.income }}" disabled></td>
+                    <td><input type="number" value="{{ record.expense }}" disabled></td>
+                    <td>{{ record.date }}</td>
+                    <td>
+                        {% if record.modify_access %}
+                        <button class="modify-btn">Modify</button>
+                        <button class="update-btn" style="display:none;">Update</button>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <h2 style='color:white; text-align:center;'>No Records Found:)</h2>
+        {% endif %}
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.modify-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    const row = button.closest('tr');
+                    row.querySelectorAll('input').forEach(input => {
+                        input.disabled = false;
+                        input.style.border = '1px solid #333';
+                        input.style.borderRadius = '5px';
+                    });
+                    button.style.display = 'none';
+                    row.querySelector('.update-btn').style.display = 'inline';
+                });
+            });
+
+            document.querySelectorAll('.update-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    if (confirm('Are you sure you want to update this record?')) {
+                        const row = button.closest('tr');
+                        const income = row.querySelector('td input[type="number"]').value;
+                        const expense = row.querySelectorAll('td input[type="number"]')[1].value;
+                        const id = row.className.split('-')[1];
+
+                        fetch('{% url "main:update_record" %}', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRFToken': '{{ csrf_token }}'
+                            },
+                            body: JSON.stringify({
+                                id: id,
+                                income: income,
+                                expense: expense
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                alert('Record updated successfully!');
+                                location.reload();
+                            } else {
+                                alert('Update failed!');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('An error occurred!');
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>

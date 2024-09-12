@@ -1,0 +1,118 @@
+form {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    width: 100%;
+    margin: auto;
+    margin-top: 10em;
+
+}
+
+h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    font-size: 16px;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+input[type="text"],
+input[type="password"],
+select {
+    width: 95%;
+    /* Adjusted width */
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-bottom: 20px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: border 0.3s;
+    margin-left: auto;
+    /* Centering the input fields */
+    margin-right: auto;
+    /* Centering the input fields */
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+    border-color: #007BFF;
+}
+
+.helptext {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+button {
+    width: 95%;
+    /* Adjusted width to match the input fields */
+    background-color: #007BFF;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-left: auto;
+    /* Centering the button */
+    margin-right: auto;
+    /* Centering the button */
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.errorlist {
+    color: red;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+/* Media Query for smaller screens */
+@media (max-width: 600px) {
+    form {
+        padding: 20px;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    button {
+        font-size: 16px;
+        padding: 10px;
+    }
+}
+
+/* Media Query for very small screens like 300px */
+@media (max-width: 400px) {
+    form {
+        padding: 15px;
+        border-radius: 8px;
+        margin-top: 2em;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+        font-size: 12px;
+        padding: 6px;
+    }
+
+    button {
+        font-size: 14px;
+        padding: 8px;
+    }
+}

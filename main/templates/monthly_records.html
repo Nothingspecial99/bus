@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block headcontent%}
+<link rel="stylesheet" href="{% static 'main/register_conductor.css' %}">
+<style>
+    body {
+        font-family: 'Roboto', sans-serif;
+        background: url('{% static "main/images/home_bg.jpg" %}') no-repeat center center fixed;
+        background-size: cover;
+    }
+    table {
+        width: 90%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        font-size: 16px;
+        margin:auto;
+        margin-top: 2em;
+        
+    }
+
+    th, td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #007BFF;
+        color: white;
+    }
+
+    tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    td {
+        color: #333;
+        background-color: white;
+    }
+
+    /* Responsive Table */
+    @media (max-width: 600px) {
+        th, td {
+            padding: 8px;
+            font-size: 12px;
+        }
+    }
+</style>
+{% endblock %}
+{% block content %}
+
+<table>
+    <thead>
+        <tr>
+            <th>Month</th>
+            <th>Income (₹)</th>
+            <th>Expense (₹)</th>
+            <th>Profit (₹)</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for record in records %}
+            <tr>
+                <td>{{ record.month }} - {{ record.year}}</td>
+                <td>{{ record.total_income }}</td>
+                <td>{{ record.total_expense }}</td>
+                <td>{{ record.total_profit}}</td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="4">No records available</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

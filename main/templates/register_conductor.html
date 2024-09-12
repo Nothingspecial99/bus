@@ -1,0 +1,22 @@
+{% extends 'base.html'  %}
+{% load static %}
+
+
+{% block headcontent%}
+<link rel="stylesheet" href="{% static 'main/register_conductor.css' %}">
+<style>
+    body {
+        font-family: 'Roboto', sans-serif;
+        background: url('{% static "main/images/home_bg.jpg" %}') no-repeat center center fixed;
+    }
+</style>
+{% endblock %}
+{% block content %}
+<form action="register_conductor" method='post'>
+    <h2>Register Conductor</h2>
+    {% csrf_token %}
+    {{ form }}
+
+    <button type="submit">Register</button>
+</form>
+{% endblock %}
