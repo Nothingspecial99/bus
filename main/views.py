@@ -104,7 +104,7 @@ def submit_record(request):
             record.date = curr_dt.date()
             record.time = curr_dt.time()
             record.save()
-            return HttpResponse("Record Submitted")
+            return render(request, "record_submitted.html")
 
     form = RecordForm()
     return render(request, "submit_record.html", {"form": form})
@@ -137,7 +137,7 @@ def owner_homepage(request):
 @user_role_required("conductor")
 def get_conductor_records(request):
     conductor = request.user
-    records = conductor.record_set.order_by("-date")[:30]
+    records = conductor.record_set.order_by("-date", "-time")[:30]
     responses = list(records.values("id", "income", "expense", "date"))
 
     for response in responses:

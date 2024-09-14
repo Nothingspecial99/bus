@@ -37,12 +37,15 @@ class RecordForm(forms.ModelForm):
     class Meta:
         model = Record
         fields = ["income", "expense", "date"]
-        widgets = {
-            "date": forms.DateInput(
-                attrs={
-                    "type": "text",
-                    "class": "datepicker",
-                    "placeholder": "Pick a date",
-                }
-            )
-        }
+
+    date = forms.DateField(
+        widget=forms.DateInput(
+            attrs={
+                "type": "text",
+                "class": "datepicker",
+                "placeholder": "Pick a date",
+            },
+            format="%d/%m/%Y",
+        ),
+        input_formats=["%d/%m/%Y"],
+    )
